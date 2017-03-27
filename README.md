@@ -20,25 +20,23 @@ Large video files are longer than 30 seconds up to 140 seconds, and/or a file si
 	$ pip install -r requirements.txt
 	```
 
-2. Fill in your [consumer keys and access tokens](https://apps.twitter.com) in `async-upload.py`:
+2. Set the following in your ENVIRONMENT [consumer keys and access tokens](https://apps.twitter.com):
 
 	```
-	CONSUMER_KEY = 'your-consumer-key'
-	CONSUMER_SECRET = 'your-consumer-secret'
-	ACCESS_TOKEN = 'your-access-token'
-	ACCESS_TOKEN_SECRET = 'your-access-secret'
+	export CONSUMER_KEY='your-consumer-key'
+	export CONSUMER_SECRET='your-consumer-secret'
+	export ACCESS_TOKEN='your-access-token'
+	export ACCESS_TOKEN_SECRET='your-access-secret'
+	export ADS_ACCOUNT_ID='your-ads-url-id' (hexadecimal ID that shows in your URL on ads.twitter.com)
+	export VIDEO_FILENAME='/full/local/path/to/video.mp4'
 	```
 
-3. Edit path to your video file in `async-upload.py`:
-
- ```
- VIDEO_FILENAME = 'path/to/video/file'
- ```
-
-4. Run script:
+3. Run script:
 
 	```
 	$ python async-upload.py
 	```
+
+4. Go to https://ads.twitter.com then select 'Creatives' and 'Media' to check for your upload.
 
 Questions? Check our [developer discussion forums](https://https://twittercommunity.com/c/media-apis).

@@ -19,7 +19,7 @@ CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
 '''
-This is the hexidecimal account ID, which occurs in the URL you see on ads.twitter.com
+This is the hexadecimal account ID, which occurs in the URL you see on ads.twitter.com
 '''
 ADS_ACCOUNT_ID = os.environ['ADS_ACCOUNT_ID']
 '''
