@@ -51,6 +51,8 @@ class VideoTweet(object):
   def upload_init(self):
     '''
     Initializes Upload
+
+    NOTE: the 'media_category' value 'amplify_video' is critical to being able to use in Ads API
     '''
     print('INIT')
 
