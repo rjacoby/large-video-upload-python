@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import datetime
 
 import json
 import requests
@@ -10,12 +11,23 @@ from requests_oauthlib import OAuth1
 MEDIA_ENDPOINT_URL = 'https://upload.twitter.com/1.1/media/upload.json'
 POST_TWEET_URL = 'https://api.twitter.com/1.1/statuses/update.json'
 
-CONSUMER_KEY = 'your-consumer-key'
-CONSUMER_SECRET = 'your-consumer-secret'
-ACCESS_TOKEN = 'your-access-token'
-ACCESS_TOKEN_SECRET = 'your-access-secret'
+'''
+Set all of these in your shell environment
+'''
+CONSUMER_KEY = os.environ['CONSUMER_KEY']
+CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
+'''
+This is the hexidecimal account ID, which occurs in the URL you see on ads.twitter.com
+'''
+ADS_ACCOUNT_ID = os.environ['ADS_ACCOUNT_ID']
+'''
+Full path to the video file
+'''
+VIDEO_FILENAME = os.environ['VIDEO_FILENAME']
 
-VIDEO_FILENAME = 'path/to/video/file'
+ADS_VIDEO_URL = "https://ads-api.twitter.com/1/accounts/" + ADS_ACCOUNT_ID + "/videos"
 
 
 oauth = OAuth1(CONSUMER_KEY,
@@ -46,7 +58,7 @@ class VideoTweet(object):
       'command': 'INIT',
       'media_type': 'video/mp4',
       'total_bytes': self.total_bytes,
-      'media_category': 'tweet_video'
+      'media_category': 'amplify_video'
     }
 
     req = requests.post(url=MEDIA_ENDPOINT_URL, data=request_data, auth=oauth)
@@ -67,7 +79,7 @@ class VideoTweet(object):
 
     while bytes_sent < self.total_bytes:
       chunk = file.read(4*1024*1024)
-      
+
       print('APPEND')
 
       request_data = {
@@ -131,7 +143,7 @@ class VideoTweet(object):
       sys.exit(0)
 
     check_after_secs = self.processing_info['check_after_secs']
-    
+
     print('Checking after %s seconds' % str(check_after_secs))
     time.sleep(check_after_secs)
 
@@ -143,7 +155,7 @@ class VideoTweet(object):
     }
 
     req = requests.get(url=MEDIA_ENDPOINT_URL, params=request_params, auth=oauth)
-    
+
     self.processing_info = req.json().get('processing_info', None)
     self.check_status()
 
@@ -160,10 +172,23 @@ class VideoTweet(object):
     req = requests.post(url=POST_TWEET_URL, data=request_data, auth=oauth)
     print(req.json())
 
+  def ads_video(self):
+    '''
+    Associates Tweet with ads ID
+    '''
+    request_data = {
+      'title': 'Test from script ',
+      'description': datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p"),
+      'video_media_id': self.media_id
+    }
+
+    req = requests.post(url=ADS_VIDEO_URL, data=request_data, auth=oauth)
+    print(req.json())
 
 if __name__ == '__main__':
   videoTweet = VideoTweet(VIDEO_FILENAME)
   videoTweet.upload_init()
   videoTweet.upload_append()
   videoTweet.upload_finalize()
-  videoTweet.tweet()
+  # videoTweet.tweet()
+  videoTweet.ads_video()
